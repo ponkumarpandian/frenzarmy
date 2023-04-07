@@ -265,12 +265,93 @@ input[type=text]::-ms-clear {
 #inspectControlFrameHeader li {
     float: left;
     display: block;
+    position: relative;
     width: 42px;
     height: 36px;
     padding: 4px 5px 4px 5px;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
+}
+
+.ax-button {
+    font-family: 'Source Sans Pro', 'Trebuchet MS', Arial;
+    font-weight: 600;
+    font-size: 12px;
+    color: #F7FAFC;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #3EACEF;
+    user-select: none;
+    border: none;
+    padding: 3px 16px;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.ax-button:hover {
+    background-color: #1482c5;
+}
+
+.pluginHint {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    top: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 11px;
+    font-weight: normal;
+    line-height: normal;
+    text-align: left;
+    width: 180px;
+    background: #ffffff;
+    border: 1px solid #d7d7d7;
+    color: #718096;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0px 1px 3px rgba(26, 32, 44, 0.2);
+}
+
+.pluginHint button {
+    margin-top: 10px;
+}
+
+.pluginHint.left {
+    left: 50%;
+    right: auto;
+    transform: translateX(-20px);
+}
+.pluginHint.right {
+    left: auto;
+    right: 50%;
+    transform: translateX(20px);
+}
+
+.pluginHint::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-top: 1px solid #d7d7d7;
+    border-left: 1px solid #d7d7d7;
+    background-color: #fff;
+    position: absolute;
+    top: -6px;
+    transform: translateX(-50%) rotate(45deg);
+    left: 50%;
+}
+
+.pluginHint.left::after {
+    left: 20px;
+    right: auto;
+    transform: translateX(-50%) rotate(45deg);
+}
+.pluginHint.right::after {
+    left: auto;
+    right: 20px;
+    transform: translateX(50%) rotate(45deg);
 }
 
 #inspectControlFrameHeader li a {
@@ -322,10 +403,9 @@ input[type=text]::-ms-clear {
 }
 
 #projectControlFrameHeader li {
+    position: relative;
     float: left;
     display: block;
-    width: 28px;
-    height: 28px;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -336,7 +416,7 @@ input[type=text]::-ms-clear {
     height: 100%;
     width: 32px;
     outline: none;
-    margin: auto;
+    margin-bottom: 3px;
     text-decoration: none;
     color: #ffffff;
     white-space: nowrap;
@@ -559,7 +639,7 @@ input[type=text]::-ms-clear {
     cursor: pointer;
 }
 
-#sitemapControlFrameContainer{
+#sitemapControlFrameContainer {
     display: flex;
     margin: 4px 6px;
 }
@@ -587,8 +667,8 @@ input[type=text]::-ms-clear {
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 175px;
-    margin-left: 10px;
     margin-right: 6px;
+    font-weight: 600;
 }
 
 .pageCountHeader {
@@ -596,8 +676,6 @@ input[type=text]::-ms-clear {
     white-space: nowrap;
     margin-left: 5px;
     margin-right: 6px;
-    color: #718096;
-    opacity: .8;
 }
 
 #interfaceAdaptiveViewsContainer {
@@ -781,7 +859,8 @@ input[type=text]::-ms-clear {
 .pluginNameHeader {
     font-size: 16px;
     font-weight: bold;
-    /*color: #6d6d6d;*/
+    flex: 1;
+    margin-left: 4px;
 }
 
 .mobileMode .pluginNameHeader {

@@ -74,13 +74,16 @@
     }
 
     var _fireAnimationFromQueue = _action.fireAnimationFromQueue = function (id, type) {
-        // Remove the function that was just fired
-        if (animationQueue[id] && animationQueue[id][type]) $ax.splice(animationQueue[id][type], 0, 1);
+        _removeAnimationFromQueue(id, type);
 
         // Fire the next func if there is one
         var func = getAnimation(id, type);
         if(func && !_checkFireActionGroup(id, type, func)) func();
     };
+
+    var _removeAnimationFromQueue = _action.removeAnimationFromQueue = function (id, type) {
+        if (animationQueue[id] && animationQueue[id][type]) $ax.splice(animationQueue[id][type], 0, 1);
+    }
 
     var _checkFireActionGroup = function(id, type, func) {
         var group = actionToActionGroups[id];
@@ -454,8 +457,8 @@
     
     var urlWithStartHtml = function(url) {
         var pageName = url.substring(0, url.lastIndexOf('.html'));
-        var pageHash = $axure.utils.setHashStringVar(START_URL_NAME, PAGE_URL_NAME, pageName);
-        return START_URL_NAME + pageHash;
+        var pageQuery = $axure.utils.setHashStringVar(START_URL_NAME, PAGE_URL_NAME, pageName);
+        return START_URL_NAME + pageQuery;
     }
     
     var urlWithCollapseSitemap = function(url) {
@@ -685,7 +688,11 @@
 
                 var isResize = action.parentEventType == 'onResize';
                 //if it's resizing, use the old rect for the threshold and clamp; otherwise, use the current rect
-                var clampRect = isResize ? $ax.visibility.getResizingRect(srcId) : $ax('#' + srcId).offsetBoundingRect(true);
+                var clampRect = $ax('#' + srcId).offsetBoundingRect(true);
+                if(isResize) {
+                    var oldRect = $ax.visibility.getResizingRect(srcId);
+                    if(oldRect) clampRect = oldRect;
+                }
 
                 $ax.dynamicPanelManager.compressMove(srcId, below, isResize, clampRect, moveInfo.options.easing, moveInfo.options.duration, below ? yDelta : xDelta, below ? xDelta : yDelta);
                 continue;
