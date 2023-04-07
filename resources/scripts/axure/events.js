@@ -1194,11 +1194,13 @@ $axure.internal(function ($ax) {
                         e.originalEvent.handled = true;
                     };
                 } else {
+                    var selected = $ax.style.IsWidgetSelected(elementId);
+                    if (selected) $ax.style.SetWidgetSelected(elementId, selected, true);
+
                     onClick = function(e) {
                         $ax.style.SetWidgetSelected(elementId, !$ax.style.IsWidgetSelected(elementId), true);
                         if(!$ax.style.IsWidgetDisabled(elementId)) e.originalEvent.handled = true;
                     };
-                  
                 }
                 input.click(onClick);
 

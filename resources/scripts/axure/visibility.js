@@ -7,6 +7,10 @@
     var _defaultLimbo = {};
 
     // ******************  Visibility and State Functions ****************** //
+    var _pageNotesEnabled = true;
+    $axure.messageCenter.addMessageListener(function (message, data) {
+        if(message == 'annotationToggle') _pageNotesEnabled = data;
+    });
 
     var _isIdVisible = $ax.visibility.IsIdVisible = function(id) {
         return $ax.visibility.IsVisible(window.document.getElementById(id));
@@ -103,7 +107,12 @@
 
         //set the visibility of the annotation box as well if it exists
         var ann = document.getElementById(elementId + "_ann");
-        if(ann) _visibility.SetVisible(ann, options.value);
+        if(ann) {
+            _visibility.SetVisible(ann, options.value);
+            var jAnn = $("#" + elementId + "_ann");
+            if(_pageNotesEnabled) jAnn.show();
+            else jAnn.hide();
+        }
 
         //set ref visibility for ref of flow shape, if that exists
         var ref = document.getElementById(elementId + '_ref');
@@ -909,7 +918,8 @@
             var state = $(states[i]);
             locs[state.attr('id')] = { x: state.scrollLeft(), y: state.scrollTop() };
         }
-        return function() {
+
+        var scrollFunc = function() {
             for(var key in locs) {
                 var state = $jobj(key);
                 state.scrollLeft(locs[key].x);
@@ -918,6 +928,17 @@
             jWindow.scrollLeft(windowLoc.x);
             jWindow.scrollTop(windowLoc.y);
         };
+
+        // for some reason scroll can be set unexpectedly to the top of page when event with flip animation was triggered more then one time
+        // so added this hack to avoid such situation more info RP-2192
+        var scrollEventHandler = function() {
+            scrollFunc();
+            window.removeEventListener("scroll", scrollEventHandler);
+        }
+
+        window.addEventListener("scroll", scrollEventHandler);
+
+        return scrollFunc;
     }
 
     var _getCurrFocus = function () {

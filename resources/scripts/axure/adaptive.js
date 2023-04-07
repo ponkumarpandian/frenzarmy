@@ -430,7 +430,7 @@
         if (message == 'switchAdaptiveView') {
             if (!$axure.utils.isInPlayer()) return;
 
-            var href = decodeURI(window.location.href.split('#')[0]);
+            var href = decodeURI(window.location.href.split('?')[0]);
             var lastSlash = href.lastIndexOf('/');
             href = href.substring(lastSlash + 1);
             if(href != data.src) return;
@@ -467,9 +467,9 @@
                 
                 $('html').css('overflow-x', 'hidden');
 
-                var bodyWidth = $body.width();
-                var isCentered = $body.css('position') == 'relative';
-                
+                var view = $ax.adaptive.currentViewId ? _idToView[$ax.adaptive.currentViewId] : $ax.pageData.defaultAdaptiveView;
+                var bodyWidth = view.size.width;
+
                 // screen width does not adjust on screen rotation for iOS (width is always shorter screen measurement)
                 var isLandscape = window.orientation != 0 && window.orientation != 180;
                 var mobileWidth = (IOS ? (isLandscape ? window.screen.height : window.screen.width) : window.screen.width) - data.panelWidthOffset;
@@ -481,6 +481,7 @@
                     if (hScaleN < scaleN) {
                         scaleN = newScaleN = hScaleN;
                     }
+                    var isCentered = $body.css('position') == 'relative';
                     if (isCentered) contentOriginOffset = scaleN * (bodyWidth / 2);
                 }
 

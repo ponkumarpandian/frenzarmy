@@ -233,7 +233,7 @@ $axure.internal(function($ax) {
                     var fixedParentPanelId = undefined;
                     for(var j = 0; j < parents.length; j++) {
                         var parentId = parents[j];
-                        if($jobj(parentId).css('z-index') != 'auto' || $ax.features.supports.mobile) {
+                        if ($ax.visibility.IsIdVisible(parentId) && ($jobj(parentId).css('z-index') != 'auto' || $ax.features.supports.mobile)) {
                             fixedParentPanelId = parents[j];
                             break;
                         }
@@ -404,15 +404,17 @@ $axure.internal(function($ax) {
             for(var index = 0; index < ids.length; index++) {
                 var elementId = ids[index];
                 var obj = $obj(elementId);
+                var query = $jobj(elementId);
                 // set opacity of child elements recursively
                 if($ax.public.fn.IsLayer(obj.type)) {
+                    query.attr('layer-opacity', opacity);
                     setOpacity(obj.objs.flatMap(o => o.scriptIds));
+                    $ax.action.removeAnimationFromQueue(elementId, $ax.action.queueTypes.fade);
                 } else if($ax.public.fn.SupportSetOpacity(obj.type)) {
                     var onComplete = function () {
                         $ax.action.fireAnimationFromQueue(elementId, $ax.action.queueTypes.fade);
                     };
-
-                    var query = $jobj(elementId);
+                    
                     if(duration == 0 || easing == 'none') {
                         query.css('opacity', opacity);
                         onComplete();
